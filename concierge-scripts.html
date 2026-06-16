@@ -269,6 +269,7 @@ function loadFromStorage(){
     if(!raw){
       if(label) label.textContent="No saved data -- start filling in below";
       if(dot) dot.className="save-dot";
+      render();
       return;
     }
     const payload=JSON.parse(raw);
