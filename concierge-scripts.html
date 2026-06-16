@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concierge Script Submission — People of The Way</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --purple-light:#EEEDFE;--purple-mid:#534AB7;--purple-dark:#3C3489;--purple-border:#AFA9EC;
+  --teal-light:#E1F5EE;--teal-dark:#085041;--teal-border:#5DCAA5;
+  --coral-light:#FAECE7;--coral-dark:#712B13;--coral-border:#F0997B;
+  --gray-bg:#F8F7F5;--gray-surface:#FFFFFF;--gray-border:#E0DED8;--gray-border2:#C8C6BF;
+  --text-primary:#1A1A1A;--text-secondary:#5A5855;--text-tertiary:#8A8880;
+  --radius:8px;--radius-lg:12px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--gray-bg);color:var(--text-primary);font-size:15px;line-height:1.6;min-height:100vh}
+.page{max-width:740px;margin:0 auto;padding:2rem 1.25rem 4rem}
+
+.page-header{text-align:center;padding:2.5rem 0 2rem}
+.potw-label{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:1rem}
+.page-header h1{font-size:28px;font-weight:600;color:var(--text-primary);margin-bottom:.5rem;letter-spacing:-0.3px}
+.page-header p{font-size:14px;color:var(--text-secondary)}
+
+.intro-card{background:#fff;border:0.5px solid var(--gray-border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:2rem;border-left:3px solid var(--purple-mid)}
+.intro-card p{font-size:13px;color:var(--text-secondary);line-height:1.75}
+.intro-card strong{color:var(--text-primary)}
+
+.card{background:#fff;border:0.5px solid var(--gray-border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem}
+
+.submitter h2{font-size:15px;font-weight:600;margin-bottom:1rem;color:var(--text-primary)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.row2{grid-template-columns:1fr}}
+
+.field{margin-bottom:1rem}
+.field:last-child{margin-bottom:0}
+.field label{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;letter-spacing:.3px;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase}
+.field label svg{width:14px;height:14px;flex-shrink:0}
+input[type=text],input[type=email],textarea,select{
+  width:100%;padding:9px 12px;font-size:14px;font-family:inherit;
+  border:0.5px solid var(--gray-border2);border-radius:var(--radius);
+  background:#FAFAF9;color:var(--text-primary);
+  transition:border-color .15s,box-shadow .15s
+}
+input:focus,textarea:focus{outline:none;border-color:var(--purple-mid);box-shadow:0 0 0 3px rgba(83,74,183,.1)}
+textarea{resize:vertical;min-height:80px;line-height:1.6}
+.hint{font-size:11px;color:var(--text-tertiary);margin-top:4px}
+.link-preview{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px}
+.link-tag{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#185FA5;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:20px;padding:3px 10px;text-decoration:none;max-width:100%;word-break:break-all}
+.link-tag:hover{background:#B5D4F4}
+.link-tag svg{width:11px;height:11px;flex-shrink:0}
+
+.entity-section{margin-bottom:2rem}
+.entity-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.entity-badge{display:inline-flex;align-items:center;gap:8px}
+.badge-pill{font-size:11px;font-weight:600;padding:4px 14px;border-radius:20px;letter-spacing:.3px}
+.pill-oc{background:var(--purple-light);color:var(--purple-dark)}
+.pill-ltc{background:var(--teal-light);color:var(--teal-dark)}
+.pill-tj{background:var(--coral-light);color:var(--coral-dark)}
+.entity-name{font-size:17px;font-weight:600;color:var(--text-primary)}
+
+.dupe-wrap{position:relative}
+.dupe-btn{font-size:12px;color:var(--text-secondary);background:#fff;border:0.5px solid var(--gray-border2);border-radius:var(--radius);padding:6px 12px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.dupe-btn:hover{background:var(--gray-bg)}
+.dupe-btn svg{width:13px;height:13px}
+.dupe-dd{display:none;position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:0.5px solid var(--gray-border2);border-radius:var(--radius);z-index:20;min-width:170px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.dupe-dd.open{display:block}
+.dupe-opt{padding:9px 14px;font-size:13px;color:var(--text-primary);cursor:pointer}
+.dupe-opt:hover{background:var(--gray-bg)}
+
+.q-card{background:#fff;border:0.5px solid var(--gray-border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem}
+.q-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:0.5px solid var(--gray-border)}
+.q-num{font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text-tertiary)}
+.remove-btn{font-size:12px;color:var(--text-tertiary);background:none;border:none;cursor:pointer;padding:2px 6px;display:flex;align-items:center;gap:4px}
+.remove-btn:hover{color:#A32D2D}
+.remove-btn svg{width:13px;height:13px}
+
+.freq-row{margin-bottom:1rem}
+.freq-label{font-size:12px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.freq-label svg{width:14px;height:14px}
+.freq-pills{display:flex;gap:8px;flex-wrap:wrap}
+.freq-pill{font-size:13px;padding:5px 16px;border-radius:20px;border:0.5px solid var(--gray-border2);cursor:pointer;background:#FAFAF9;color:var(--text-secondary);font-family:inherit;transition:none}
+.freq-pill:hover{border-color:var(--gray-border2);background:var(--gray-bg)}
+.freq-pill.sel-daily{background:var(--purple-light);color:var(--purple-dark);border-color:var(--purple-border)}
+.freq-pill.sel-weekly{background:var(--teal-light);color:var(--teal-dark);border-color:var(--teal-border)}
+.freq-pill.sel-occasionally{background:#F1EFE8;color:#444441;border-color:#B4B2A9}
+
+.cross-row{margin-bottom:1rem}
+.cross-label{font-size:12px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.cross-label svg{width:14px;height:14px}
+.checkbox-row{display:flex;gap:20px;flex-wrap:wrap}
+.cb-item{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text-primary);cursor:pointer}
+.cb-item input[type=checkbox]{width:15px;height:15px;accent-color:var(--purple-mid);cursor:pointer}
+
+.divider{border:none;border-top:0.5px solid var(--gray-border);margin:2rem 0}
+
+.add-btn{font-size:13px;color:var(--text-secondary);background:none;border:0.5px dashed var(--gray-border2);border-radius:var(--radius);padding:9px 16px;cursor:pointer;width:100%;text-align:left;display:flex;align-items:center;gap:6px;font-family:inherit}
+.add-btn:hover{background:#fff}
+.add-btn svg{width:15px;height:15px}
+
+.submit-area{text-align:center;padding:1.5rem 0}
+.copy-btn{font-size:15px;font-weight:600;padding:12px 32px;border-radius:var(--radius);border:none;background:var(--purple-mid);color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-family:inherit}
+.copy-btn:hover{background:var(--purple-dark)}
+.copy-btn.copied{background:#085041}
+.copy-btn svg{width:18px;height:18px}
+.submit-hint{font-size:12px;color:var(--text-tertiary);margin-top:10px}
+
+.output-area{margin-top:1.5rem;background:#1A1A1A;border-radius:var(--radius-lg);padding:1.25rem;font-size:12px;font-family:'SF Mono',Monaco,monospace;color:#C8C6BF;white-space:pre-wrap;display:none;max-height:340px;overflow-y:auto;text-align:left}
+
+.footer{text-align:center;padding:2rem 0 0;font-size:12px;color:var(--text-tertiary)}
+.copy-box-btn{margin-top:10px;font-size:13px;font-weight:600;padding:8px 20px;border-radius:var(--radius);border:none;background:var(--purple-mid);color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
+.copy-box-btn:hover{background:var(--purple-dark)}
+.copy-box-btn svg{width:15px;height:15px}
+.success-banner{display:none;margin-top:1rem;background:#E1F5EE;border:0.5px solid var(--teal-border);border-radius:var(--radius-lg);padding:1rem 1.25rem;text-align:left}
+.success-banner p{font-size:14px;color:var(--teal-dark);line-height:1.6}
+.success-banner strong{font-weight:600}
+.success-banner .steps{margin-top:.5rem;font-size:13px;color:var(--teal-dark)}
+.success-banner .steps li{margin-bottom:4px}
+.save-bar{position:sticky;top:0;z-index:50;background:rgba(248,247,245,.95);backdrop-filter:blur(4px);border-bottom:0.5px solid var(--gray-border);padding:8px 1.25rem;display:flex;align-items:center;justify-content:space-between;font-size:12px}
+.save-status{display:flex;align-items:center;gap:6px;color:var(--text-tertiary)}
+.save-dot{width:7px;height:7px;border-radius:50%;background:#C8C6BF;flex-shrink:0;transition:background .3s}
+.save-dot.saved{background:#1D9E75}
+.save-dot.saving{background:#EF9F27}
+.clear-btn{font-size:12px;color:var(--text-tertiary);background:none;border:0.5px solid var(--gray-border2);border-radius:var(--radius);padding:4px 10px;cursor:pointer;font-family:inherit}
+.clear-btn:hover{color:#A32D2D;border-color:#F09595}
+</style>
+</head>
+<body>
+<div class="save-bar">
+  <div class="save-status">
+    <div class="save-dot" id="save-dot"></div>
+    <span id="save-label">Loading saved data…</span>
+  </div>
+  <button class="clear-btn" onclick="clearAll()">Clear &amp; start over</button>
+</div>
+
+<div class="page">
+
+  <div class="page-header">
+    <div class="potw-label">People of The Way</div>
+    <h1>Concierge script submission</h1>
+    <p>Reception knowledge collection — please complete for the entities you work with</p>
+  </div>
+
+  <div class="intro-card">
+    <p>Hi team! We're building out our <strong>Concierge Command Centre</strong> to help reception volunteers answer enquiries confidently and consistently. Your knowledge is the heart of this tool.<br><br>
+    For each entity you work with, list the top 3–5 questions you regularly field and fill in the details below. If a question comes up across multiple entities, tick the boxes — no need to type it twice. When you're done, hit <strong>Compile &amp; copy</strong> and paste the result into an email to Kevin.</p>
+  </div>
+
+  <div class="card submitter">
+    <h2>Your details</h2>
+    <div class="row2">
+      <div class="field">
+        <label>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          Your name
+        </label>
+        <input type="text" id="sub-name" placeholder="e.g. Anita Rossow">
+      </div>
+      <div class="field">
+        <label>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+          Your email
+        </label>
+        <input type="email" id="sub-email" placeholder="e.g. anita@ourchurch.org.au">
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div id="entities-container"></div>
+
+  <div class="submit-area">
+    <button class="copy-btn" id="copy-btn" onclick="compileAndCopy()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Compile &amp; copy responses
+    </button>
+    <p class="submit-hint">Copies a formatted summary — paste into an email to Kevin (kevinthomas@ourchurch.org.au)</p>
+    <div class="output-area" id="output-area"></div>
+<div id="copy-box-wrap" style="display:none;text-align:center;margin-top:10px">
+  <button class="copy-box-btn" onclick="copyFromBox()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+    Copy to clipboard again
+  </button>
+</div>
+<div class="success-banner" id="success-banner">
+  <p><strong>&#10003; Your responses are copied to clipboard!</strong></p>
+  <p class="steps">Now send them to Kevin:</p>
+  <ol class="steps">
+    <li>Open your email app</li>
+    <li>Create a new email to <strong>kevinthomas@ourchurch.org.au</strong></li>
+    <li>Click in the body and press <strong>&#8984;V</strong> to paste</li>
+    <li>Hit send!</li>
+  </ol>
+</div>
+  </div>
+
+  <div class="footer">People of The Way · Concierge Command Centre · Internal use only</div>
+</div>
+
+<script>
+
+const ENTITIES=[
+  {id:"oc",label:"OurChurch",pill:"pill-oc"},
+  {id:"ltc",label:"Love This City",pill:"pill-ltc"},
+  {id:"tj",label:"The Junction",pill:"pill-tj"}
+];
+
+const FIELDS=[
+  {key:"q",label:"FAQ — the question as callers ask it",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>',type:"text",ph:"e.g. What are your service times?"},
+  {key:"ki",label:"Key info bullets — one fact per line (hours, locations, links)",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',type:"textarea",ph:"Sunday service: 9am | Cafe opens: 8am | Website: ourchurch.org.au",hint:"Each line becomes a bullet in the Key Info panel"},
+  {key:"script",label:"Suggested script — word for word what reception should say",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',type:"textarea",ph:'e.g. "Thanks for calling! We meet on Sunday mornings at 9am..."',hint:"Write it naturally — warm and conversational"},
+  {key:"esc",label:"Escalate to — who should reception pass this caller to?",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>',type:"text",ph:"e.g. Wendy Markham — Children's Pastor"},
+  {key:"sms",label:"SMS template — short follow-up text to send caller after the call",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.13 6.13l.94-.94a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',type:"text",ph:"e.g. Hi [Name], great chatting! We meet Sundays 9am. More at ourchurch.org.au"},
+  {key:"notes",label:"Team notes — what concierge should log or action after this call",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 14-4-4 4-4"/><path d="M5 10h11a4 4 0 0 1 0 8h-1"/></svg>',type:"textarea",ph:"e.g. OurKids — notify Anita | OurYouth — notify Megs | General — notify Team"}
+];
+
+const SAVE_KEY='potw_concierge_form_v1';
+const state={};
+ENTITIES.forEach(e=>{state[e.id]=[makeQ(e.id)]});
+
+function makeQ(entId){
+  const cross={};
+  ENTITIES.forEach(e=>{cross[e.id]=e.id===entId});
+  return {q:"",ki:"",script:"",esc:"",sms:"",notes:"",freq:"",cross};
+}
+
+function cloneQ(q,entId){
+  const cross={};
+  ENTITIES.forEach(e=>{cross[e.id]=e.id===entId});
+  return Object.assign({},q,{cross,freq:q.freq});
+}
+
+function esc(s){return(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+
+// -- SAVE / LOAD ----------------------------------------------
+let saveTimer=null;
+function triggerSave(){
+  const dot=document.getElementById("save-dot");
+  const label=document.getElementById("save-label");
+  if(dot) dot.className="save-dot saving";
+  if(label) label.textContent="Saving...";
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{
+    try{
+      const payload={
+        name:document.getElementById("sub-name").value,
+        email:document.getElementById("sub-email").value,
+        state:state,
+        savedAt:new Date().toISOString()
+      };
+      localStorage.setItem(SAVE_KEY,JSON.stringify(payload));
+      if(dot) dot.className="save-dot saved";
+      if(label){
+        const t=new Date().toLocaleTimeString("en-AU",{hour:"2-digit",minute:"2-digit"});
+        label.textContent="Progress saved at "+t;
+      }
+    }catch(e){
+      if(label) label.textContent="Could not save -- use Compile & copy before closing";
+    }
+  },800);
+}
+
+function loadFromStorage(){
+  const dot=document.getElementById("save-dot");
+  const label=document.getElementById("save-label");
+  try{
+    const raw=localStorage.getItem(SAVE_KEY);
+    if(!raw){
+      if(label) label.textContent="No saved data -- start filling in below";
+      if(dot) dot.className="save-dot";
+      return;
+    }
+    const payload=JSON.parse(raw);
+    if(payload.name) document.getElementById("sub-name").value=payload.name;
+    if(payload.email) document.getElementById("sub-email").value=payload.email;
+    if(payload.state){
+      ENTITIES.forEach(e=>{
+        if(payload.state[e.id]&&Array.isArray(payload.state[e.id])){
+          state[e.id]=payload.state[e.id].map(q=>{
+            const cross={};
+            ENTITIES.forEach(ent=>{cross[ent.id]=q.cross?!!q.cross[ent.id]:ent.id===e.id});
+            return Object.assign(makeQ(e.id),q,{cross});
+          });
+          if(!state[e.id].length) state[e.id]=[makeQ(e.id)];
+        }
+      });
+    }
+    render();
+    const t=new Date(payload.savedAt).toLocaleTimeString("en-AU",{hour:"2-digit",minute:"2-digit"});
+    if(label) label.textContent="Restored -- last saved at "+t;
+    if(dot) dot.className="save-dot saved";
+  }catch(e){
+    if(label) label.textContent="No saved data -- start filling in below";
+    if(dot) dot.className="save-dot";
+  }
+}
+
+function clearAll(){
+  if(!confirm("Clear all your answers and start over? This cannot be undone.")) return;
+  localStorage.removeItem(SAVE_KEY);
+  ENTITIES.forEach(e=>{state[e.id]=[makeQ(e.id)]});
+  document.getElementById("sub-name").value="";
+  document.getElementById("sub-email").value="";
+  render();
+  const dot=document.getElementById("save-dot");
+  const label=document.getElementById("save-label");
+  if(dot) dot.className="save-dot";
+  if(label) label.textContent="Cleared -- ready for a fresh start";
+}
+
+// -- FIELD ACTIONS --------------------------------------------
+function upd(el){
+  const {ent,qi,key}=el.dataset;
+  state[ent][qi][key]=el.value;
+  triggerSave();
+}
+
+function setFreq(entId,qi,val){
+  state[entId][qi].freq=val;
+  triggerSave();
+  render();
+}
+
+function setCross(entId,qi,otherId,val){
+  state[entId][qi].cross[otherId]=val;
+  triggerSave();
+}
+
+function addQ(entId){
+  if(state[entId].length<5){
+    state[entId].push(makeQ(entId));
+    triggerSave();
+    render();
+  }
+}
+
+function removeQ(entId,qi){
+  state[entId].splice(qi,1);
+  if(!state[entId].length) state[entId]=[makeQ(entId)];
+  triggerSave();
+  render();
+}
+
+
+
+
+
+function toggleDD(entId){
+  const dd=document.getElementById("dd-"+entId);
+  dd.classList.toggle("open");
+  setTimeout(()=>{
+    document.addEventListener("click",function h(ev){
+      if(!document.getElementById("dw-"+entId).contains(ev.target)){
+        dd.classList.remove("open");
+        document.removeEventListener("click",h);
+      }
+    });
+  },0);
+}
+
+function dupeFrom(toId,fromId){
+  const src=state[fromId];
+  if(!src||!src.length) return;
+  if(state[toId].length<5) state[toId].push(cloneQ(src[src.length-1],toId));
+  document.getElementById("dd-"+toId).classList.remove("open");
+  triggerSave();
+  render();
+}
+
+// -- RENDER ---------------------------------------------------
+function render(){
+  const c=document.getElementById("entities-container");
+  c.innerHTML="";
+  ENTITIES.forEach(ent=>{
+    const qs=state[ent.id];
+    const others=ENTITIES.filter(e=>e.id!==ent.id);
+    let h=`<div class="entity-section">
+      <div class="entity-header">
+        <div class="entity-badge">
+          <span class="badge-pill ${ent.pill}">${ent.label}</span>
+        </div>
+        <div class="dupe-wrap" id="dw-${ent.id}">
+          <button class="dupe-btn" onclick="toggleDD('${ent.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy question from...
+          </button>
+          <div class="dupe-dd" id="dd-${ent.id}">
+            ${others.map(o=>`<div class="dupe-opt" onclick="dupeFrom('${ent.id}','${o.id}')">${o.label}</div>`).join("")}
+          </div>
+        </div>
+      </div>`;
+
+    qs.forEach((q,qi)=>{
+      h+=`<div class="q-card">
+        <div class="q-card-header">
+          <span class="q-num">Question ${qi+1} of ${qs.length}</span>
+          ${qs.length>1?`<button class="remove-btn" onclick="removeQ('${ent.id}',${qi})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 6 6 18M6 6l12 12"/></svg> Remove</button>`:""}
+        </div>`;
+
+      FIELDS.forEach(f=>{
+        let fieldHtml=`<div class="field">
+          <label>${f.icon}${f.label}</label>
+          ${f.type==="textarea"
+            ?`<textarea rows="3" data-ent="${ent.id}" data-qi="${qi}" data-key="${f.key}" placeholder="${esc(f.ph)}" oninput="upd(this)">${esc(q[f.key]||"")}</textarea>`
+            :`<input type="text" data-ent="${ent.id}" data-qi="${qi}" data-key="${f.key}" placeholder="${esc(f.ph)}" value="${esc(q[f.key]||"")}" oninput="upd(this)">`
+          }
+          ${f.hint?`<div class="hint">${f.hint}</div>`:""}
+        </div>`;
+        h+=fieldHtml;
+      });
+
+      // Frequency pills
+      h+=`<div class="freq-row">
+        <div class="freq-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 4-4"/></svg>How often does this come up?</div>
+        <div class="freq-pills">
+          ${["Daily","Weekly","Occasionally"].map(fr=>{
+            const k=fr.toLowerCase();
+            const sel=q.freq===k?" sel-"+k:"";
+            return`<button class="freq-pill${sel}" onclick="setFreq('${ent.id}',${qi},'${k}')">${fr}</button>`;
+          }).join("")}
+        </div>
+      </div>`;
+
+      // Cross-entity checkboxes
+      if(others.length){
+        h+=`<div class="cross-row">
+          <div class="cross-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 16V4m0 0L3 8m4-4 4 4"/><path d="M17 8v12m0 0 4-4m-4 4-4-4"/></svg>Also applies to</div>
+          <div class="checkbox-row">
+            ${others.map(o=>`<label class="cb-item"><input type="checkbox" ${q.cross[o.id]?"checked":""} onchange="setCross('${ent.id}',${qi},'${o.id}',this.checked)">${o.label}</label>`).join("")}
+          </div>
+        </div>`;
+      }
+
+      h+=`</div>`;
+    });
+
+    if(qs.length<5){
+      h+=`<button class="add-btn" onclick="addQ('${ent.id}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+        Add another question for ${ent.label}
+      </button>`;
+    }
+    h+=`</div><hr class="divider">`;
+    c.innerHTML+=h;
+  });
+}
+
+// -- COMPILE --------------------------------------------------
+function copyFromBox(){
+  const text = document.getElementById("output-area").textContent;
+  if(!text) return;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = event.target.closest("button");
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6 9 17l-5-5"/></svg> Copied!';
+    setTimeout(()=>{
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy to clipboard again';
+    }, 2000);
+  });
+}
+
+function compileAndCopy(){
+  const name=document.getElementById("sub-name").value.trim()||"(not provided)";
+  const email=document.getElementById("sub-email").value.trim()||"(not provided)";
+  let out="CONCIERGE SCRIPT SUBMISSION\n";
+  out+=`Submitted by: ${name} (${email})\n`;
+  out+=`Date: ${new Date().toLocaleDateString("en-AU",{day:"numeric",month:"long",year:"numeric"})}\n`;
+  out+="=".repeat(50)+"\n\n";
+  ENTITIES.forEach(ent=>{
+    const qs=state[ent.id].filter(q=>Object.entries(q).some(([k,v])=>k!=="cross"&&k!=="freq"&&k!=="linksArr"&&String(v).trim()));
+    if(!qs.length) return;
+    out+=`ENTITY: ${ent.label.toUpperCase()}\n`+"\u2500".repeat(40)+"\n\n";
+    qs.forEach((q,i)=>{
+      out+=`Question ${i+1}:\n`;
+      if(q.freq) out+=`  Frequency: ${q.freq.charAt(0).toUpperCase()+q.freq.slice(1)}\n`;
+      const also=ENTITIES.filter(e=>e.id!==ent.id&&q.cross[e.id]).map(e=>e.label);
+      if(also.length) out+=`  Also applies to: ${also.join(", ")}\n`;
+      if(q.q) out+=`  TITLE: ${q.q}\n`;
+      if(q.ki) out+=`  KEY INFO:\n${q.ki.split("\n").filter(l=>l.trim()).map(l=>"    - "+l.trim()).join("\n")}\n`;
+      if(q.script) out+=`  SCRIPT: ${q.script}\n`;
+      if(q.esc) out+=`  ESCALATE TO: ${q.esc}\n`;
+      if(q.sms) out+=`  SMS: ${q.sms}\n`;
+      if(q.notes) out+=`  NOTES: ${q.notes}\n`;
+      out+="\n";
+    });
+    out+="\n";
+  });
+  const area=document.getElementById("output-area");
+  area.style.display="block";
+  area.textContent=out;
+  document.getElementById("copy-box-wrap").style.display="block";
+  document.getElementById("success-banner").style.display="block";
+  navigator.clipboard.writeText(out).catch(()=>{});
+  const btn=document.getElementById("copy-btn");
+  btn.classList.add("copied");
+  btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6 9 17l-5-5"/></svg> Copied to clipboard!`;
+  setTimeout(()=>{
+    btn.classList.remove("copied");
+    btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Compile &amp; copy responses`;
+  },2500);
+}
+
+// -- INIT -----------------------------------------------------
+document.addEventListener("DOMContentLoaded",()=>{
+  loadFromStorage();
+  document.getElementById("sub-name").addEventListener("input",triggerSave);
+  document.getElementById("sub-email").addEventListener("input",triggerSave);
+});
+
+</script>
+</body>
+</html>
