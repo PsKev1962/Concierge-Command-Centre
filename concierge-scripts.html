@@ -7,122 +7,131 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --purple-light:#EEEDFE;--purple-mid:#534AB7;--purple-dark:#3C3489;--purple-border:#AFA9EC;
+  --purple:#534AB7;--purple-light:#EEEDFE;--purple-dark:#3C3489;--purple-border:#C5C1F0;
   --teal-light:#E1F5EE;--teal-dark:#085041;--teal-border:#5DCAA5;
-  --coral-light:#FAECE7;--coral-dark:#712B13;--coral-border:#F0997B;
-  --gray-bg:#F8F7F5;--gray-surface:#FFFFFF;--gray-border:#E0DED8;--gray-border2:#C8C6BF;
-  --text-primary:#1A1A1A;--text-secondary:#5A5855;--text-tertiary:#8A8880;
+  --coral-light:#FAECE7;--coral-dark:#712B13;
+  --bg:#F5F4F1;--surface:#FFFFFF;--border:#E2E0DA;--border2:#C8C6BF;
+  --text:#1A1A1A;--text2:#5A5855;--text3:#8A8880;
   --radius:8px;--radius-lg:12px;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--gray-bg);color:var(--text-primary);font-size:15px;line-height:1.6;min-height:100vh}
-.page{max-width:740px;margin:0 auto;padding:2rem 1.25rem 4rem}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;min-height:100vh}
+.page{max-width:680px;margin:0 auto;padding:2rem 1.25rem 4rem}
 
+/* Save bar */
+.save-bar{position:sticky;top:0;z-index:50;background:rgba(245,244,241,.96);backdrop-filter:blur(4px);border-bottom:1px solid var(--border);padding:8px 1.25rem;display:flex;align-items:center;justify-content:space-between;font-size:12px}
+.save-status{display:flex;align-items:center;gap:6px;color:var(--text3)}
+.save-dot{width:7px;height:7px;border-radius:50%;background:#C8C6BF;flex-shrink:0}
+.save-dot.saved{background:#1D9E75}
+.save-dot.saving{background:#EF9F27}
+.clear-btn{font-size:12px;color:var(--text3);background:none;border:1px solid var(--border2);border-radius:var(--radius);padding:4px 10px;cursor:pointer;font-family:inherit}
+.clear-btn:hover{color:#A32D2D;border-color:#F09595}
+
+/* Page header */
 .page-header{text-align:center;padding:2.5rem 0 2rem}
-.potw-label{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:1rem}
-.page-header h1{font-size:28px;font-weight:600;color:var(--text-primary);margin-bottom:.5rem;letter-spacing:-0.3px}
-.page-header p{font-size:14px;color:var(--text-secondary)}
+.potw-label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:1rem}
+.page-header h1{font-size:26px;font-weight:600;color:var(--text);margin-bottom:.4rem;letter-spacing:-0.3px}
+.page-header p{font-size:14px;color:var(--text2)}
 
-.intro-card{background:#fff;border:0.5px solid var(--gray-border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:2rem;border-left:3px solid var(--purple-mid)}
-.intro-card p{font-size:13px;color:var(--text-secondary);line-height:1.75}
-.intro-card strong{color:var(--text-primary)}
+/* Intro */
+.intro-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:2rem}
+.intro-card p{font-size:13px;color:var(--text2);line-height:1.75}
 
-.card{background:#fff;border:0.5px solid var(--gray-border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem}
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1.25rem}
 
-.submitter h2{font-size:15px;font-weight:600;margin-bottom:1rem;color:var(--text-primary)}
+/* Submitter */
+.submitter h2{font-size:15px;font-weight:600;margin-bottom:1rem;color:var(--text)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:520px){.row2{grid-template-columns:1fr}}
 
-.field{margin-bottom:1rem}
-.field:last-child{margin-bottom:0}
-.field label{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;letter-spacing:.3px;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase}
-.field label svg{width:14px;height:14px;flex-shrink:0}
-input[type=text],input[type=email],textarea,select{
-  width:100%;padding:9px 12px;font-size:14px;font-family:inherit;
-  border:0.5px solid var(--gray-border2);border-radius:var(--radius);
-  background:#FAFAF9;color:var(--text-primary);
-  transition:border-color .15s,box-shadow .15s
-}
-input:focus,textarea:focus{outline:none;border-color:var(--purple-mid);box-shadow:0 0 0 3px rgba(83,74,183,.1)}
-textarea{resize:vertical;min-height:80px;line-height:1.6}
-.hint{font-size:11px;color:var(--text-tertiary);margin-top:4px}
-.link-preview{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px}
-.link-tag{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#185FA5;background:#E6F1FB;border:0.5px solid #85B7EB;border-radius:20px;padding:3px 10px;text-decoration:none;max-width:100%;word-break:break-all}
-.link-tag:hover{background:#B5D4F4}
-.link-tag svg{width:11px;height:11px;flex-shrink:0}
-
+/* Entity sections */
 .entity-section{margin-bottom:2rem}
 .entity-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
-.entity-badge{display:inline-flex;align-items:center;gap:8px}
-.badge-pill{font-size:11px;font-weight:600;padding:4px 14px;border-radius:20px;letter-spacing:.3px}
+.badge-pill{font-size:11px;font-weight:600;padding:5px 14px;border-radius:20px;letter-spacing:.3px}
 .pill-oc{background:var(--purple-light);color:var(--purple-dark)}
 .pill-ltc{background:var(--teal-light);color:var(--teal-dark)}
 .pill-tj{background:var(--coral-light);color:var(--coral-dark)}
-.entity-name{font-size:17px;font-weight:600;color:var(--text-primary)}
 
+/* Dupe button */
 .dupe-wrap{position:relative}
-.dupe-btn{font-size:12px;color:var(--text-secondary);background:#fff;border:0.5px solid var(--gray-border2);border-radius:var(--radius);padding:6px 12px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap}
-.dupe-btn:hover{background:var(--gray-bg)}
+.dupe-btn{font-size:12px;color:var(--text2);background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:5px 12px;cursor:pointer;display:flex;align-items:center;gap:5px;font-family:inherit}
+.dupe-btn:hover{background:var(--bg)}
 .dupe-btn svg{width:13px;height:13px}
-.dupe-dd{display:none;position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:0.5px solid var(--gray-border2);border-radius:var(--radius);z-index:20;min-width:170px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.dupe-dd{display:none;position:absolute;right:0;top:calc(100% + 5px);background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);z-index:20;min-width:160px;box-shadow:0 4px 12px rgba(0,0,0,.07)}
 .dupe-dd.open{display:block}
-.dupe-opt{padding:9px 14px;font-size:13px;color:var(--text-primary);cursor:pointer}
-.dupe-opt:hover{background:var(--gray-bg)}
+.dupe-opt{padding:9px 14px;font-size:13px;color:var(--text);cursor:pointer}
+.dupe-opt:hover{background:var(--bg)}
 
-.q-card{background:#fff;border:0.5px solid var(--gray-border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem}
-.q-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:0.5px solid var(--gray-border)}
-.q-num{font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--text-tertiary)}
-.remove-btn{font-size:12px;color:var(--text-tertiary);background:none;border:none;cursor:pointer;padding:2px 6px;display:flex;align-items:center;gap:4px}
+/* Question card */
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1rem}
+.q-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.q-num{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--text3)}
+.remove-btn{font-size:12px;color:var(--text3);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit}
 .remove-btn:hover{color:#A32D2D}
 .remove-btn svg{width:13px;height:13px}
 
-.freq-row{margin-bottom:1rem}
-.freq-label{font-size:12px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.freq-label svg{width:14px;height:14px}
+/* Fields */
+.field{margin-bottom:1.25rem}
+.field:last-child{margin-bottom:0}
+.field-label{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.field-label svg{width:14px;height:14px;flex-shrink:0;color:var(--purple)}
+.field-sublabel{font-size:12px;font-weight:400;color:var(--text3);margin-left:2px}
+input[type=text],input[type=email],textarea{width:100%;padding:9px 12px;font-size:14px;font-family:inherit;border:1px solid var(--border2);border-radius:var(--radius);background:#FAFAF9;color:var(--text);transition:border-color .15s,box-shadow .15s}
+input:focus,textarea:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 3px rgba(83,74,183,.1)}
+textarea{resize:vertical;min-height:80px;line-height:1.6}
+.hint{font-size:11px;color:var(--text3);margin-top:5px;font-style:italic}
+
+/* Freq pills */
+.freq-row{margin-bottom:1.25rem}
+.freq-label{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.freq-label svg{width:14px;height:14px;color:var(--purple)}
 .freq-pills{display:flex;gap:8px;flex-wrap:wrap}
-.freq-pill{font-size:13px;padding:5px 16px;border-radius:20px;border:0.5px solid var(--gray-border2);cursor:pointer;background:#FAFAF9;color:var(--text-secondary);font-family:inherit;transition:none}
-.freq-pill:hover{border-color:var(--gray-border2);background:var(--gray-bg)}
+.freq-pill{font-size:13px;padding:5px 16px;border-radius:20px;border:1px solid var(--border2);cursor:pointer;background:#FAFAF9;color:var(--text2);font-family:inherit}
+.freq-pill:hover{border-color:var(--border2);background:var(--bg)}
 .freq-pill.sel-daily{background:var(--purple-light);color:var(--purple-dark);border-color:var(--purple-border)}
 .freq-pill.sel-weekly{background:var(--teal-light);color:var(--teal-dark);border-color:var(--teal-border)}
 .freq-pill.sel-occasionally{background:#F1EFE8;color:#444441;border-color:#B4B2A9}
 
-.cross-row{margin-bottom:1rem}
-.cross-label{font-size:12px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.cross-label svg{width:14px;height:14px}
+/* Cross-entity */
+.cross-row{margin-bottom:1.25rem}
+.cross-label{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.cross-label svg{width:14px;height:14px;color:var(--purple)}
 .checkbox-row{display:flex;gap:20px;flex-wrap:wrap}
-.cb-item{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text-primary);cursor:pointer}
-.cb-item input[type=checkbox]{width:15px;height:15px;accent-color:var(--purple-mid);cursor:pointer}
+.cb-item{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text);cursor:pointer}
+.cb-item input[type=checkbox]{width:15px;height:15px;accent-color:var(--purple);cursor:pointer}
 
-.divider{border:none;border-top:0.5px solid var(--gray-border);margin:2rem 0}
-
-.add-btn{font-size:13px;color:var(--text-secondary);background:none;border:0.5px dashed var(--gray-border2);border-radius:var(--radius);padding:9px 16px;cursor:pointer;width:100%;text-align:left;display:flex;align-items:center;gap:6px;font-family:inherit}
-.add-btn:hover{background:#fff}
+/* Add btn */
+.add-btn{font-size:13px;color:var(--text2);background:none;border:1px dashed var(--border2);border-radius:var(--radius);padding:10px 16px;cursor:pointer;width:100%;text-align:left;display:flex;align-items:center;gap:6px;font-family:inherit;margin-top:4px}
+.add-btn:hover{background:var(--surface)}
 .add-btn svg{width:15px;height:15px}
 
+/* Divider */
+.divider{border:none;border-top:1px solid var(--border);margin:2rem 0}
+
+/* Submit */
 .submit-area{text-align:center;padding:1.5rem 0}
-.copy-btn{font-size:15px;font-weight:600;padding:12px 32px;border-radius:var(--radius);border:none;background:var(--purple-mid);color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-family:inherit}
+.copy-btn{font-size:15px;font-weight:600;padding:13px 36px;border-radius:var(--radius);border:none;background:var(--purple);color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-family:inherit}
 .copy-btn:hover{background:var(--purple-dark)}
 .copy-btn.copied{background:#085041}
 .copy-btn svg{width:18px;height:18px}
-.submit-hint{font-size:12px;color:var(--text-tertiary);margin-top:10px}
+.submit-hint{font-size:12px;color:var(--text3);margin-top:10px}
 
-.output-area{margin-top:1.5rem;background:#1A1A1A;border-radius:var(--radius-lg);padding:1.25rem;font-size:12px;font-family:'SF Mono',Monaco,monospace;color:#C8C6BF;white-space:pre-wrap;display:none;max-height:340px;overflow-y:auto;text-align:left}
-
-.footer{text-align:center;padding:2rem 0 0;font-size:12px;color:var(--text-tertiary)}
-.copy-box-btn{margin-top:10px;font-size:13px;font-weight:600;padding:8px 20px;border-radius:var(--radius);border:none;background:var(--purple-mid);color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
+/* Copy box */
+.copy-box-btn{margin-top:10px;font-size:13px;font-weight:600;padding:8px 20px;border-radius:var(--radius);border:none;background:var(--purple);color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit}
 .copy-box-btn:hover{background:var(--purple-dark)}
 .copy-box-btn svg{width:15px;height:15px}
-.success-banner{display:none;margin-top:1rem;background:#E1F5EE;border:0.5px solid var(--teal-border);border-radius:var(--radius-lg);padding:1rem 1.25rem;text-align:left}
+
+/* Success banner */
+.success-banner{display:none;margin-top:1rem;background:var(--teal-light);border:1px solid var(--teal-border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;text-align:left}
 .success-banner p{font-size:14px;color:var(--teal-dark);line-height:1.6}
 .success-banner strong{font-weight:600}
-.success-banner .steps{margin-top:.5rem;font-size:13px;color:var(--teal-dark)}
-.success-banner .steps li{margin-bottom:4px}
-.save-bar{position:sticky;top:0;z-index:50;background:rgba(248,247,245,.95);backdrop-filter:blur(4px);border-bottom:0.5px solid var(--gray-border);padding:8px 1.25rem;display:flex;align-items:center;justify-content:space-between;font-size:12px}
-.save-status{display:flex;align-items:center;gap:6px;color:var(--text-tertiary)}
-.save-dot{width:7px;height:7px;border-radius:50%;background:#C8C6BF;flex-shrink:0;transition:background .3s}
-.save-dot.saved{background:#1D9E75}
-.save-dot.saving{background:#EF9F27}
-.clear-btn{font-size:12px;color:var(--text-tertiary);background:none;border:0.5px solid var(--gray-border2);border-radius:var(--radius);padding:4px 10px;cursor:pointer;font-family:inherit}
-.clear-btn:hover{color:#A32D2D;border-color:#F09595}
+.success-banner ol{margin-top:.5rem;font-size:13px;color:var(--teal-dark);padding-left:1.25rem}
+.success-banner ol li{margin-bottom:4px}
+
+/* Output */
+.output-area{margin-top:1.5rem;background:#1A1A1A;border-radius:var(--radius-lg);padding:1.25rem;font-size:12px;font-family:'SF Mono',Monaco,monospace;color:#C8C6BF;white-space:pre-wrap;display:none;max-height:300px;overflow-y:auto;text-align:left}
+
+.footer{text-align:center;padding:2rem 0 0;font-size:12px;color:var(--text3)}
 </style>
 </head>
 <body>
@@ -207,14 +216,14 @@ const ENTITIES=[
 ];
 
 const FIELDS=[
-  {key:"q",label:"Script title — the question as callers ask it",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>',type:"text",ph:"e.g. What are your service times?"},
-  {key:"cat",label:"Category — topic group for this script",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h8m-8 6h16"/></svg>',type:"text",ph:"e.g. Service Times, General Info, Pastoral / Welfare, Events & Tickets"},
-  {key:"pastoral",label:"Pastoral / Welfare flag — type YES if this involves grief, crisis or welfare",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',type:"text",ph:"Type YES or leave blank",hint:"Pastoral scripts show a red priority banner in the Command Centre"},
-  {key:"ki",label:"Key info points — one fact per line (volunteers read these at a glance)",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',type:"textarea",ph:"e.g. Sunday service: 9am | Cafe opens: 8am | Website: ourchurch.org.au",hint:"Each line becomes a bullet point in the Key Info panel"},
-  {key:"script",label:"Suggested script — word for word what reception should say",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',type:"textarea",ph:'e.g. Thanks for calling! We meet on Sunday mornings at 9am...',hint:"Write it naturally — warm and conversational"},
-  {key:"esc",label:"Escalate to — who should reception pass this caller to?",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>',type:"text",ph:"e.g. Wendy Markham — Childrens Pastor"},
-  {key:"sms",label:"SMS template — short follow-up text to send the caller",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.13 6.13l.94-.94a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',type:"text",ph:"e.g. Hi [Name], great chatting! We meet Sundays 9am. More at ourchurch.org.au"},
-  {key:"notes",label:"Team notes — what concierge should log or action after this call",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 14-4-4 4-4"/><path d="M5 10h11a4 4 0 0 1 0 8h-1"/></svg>',type:"textarea",ph:"e.g. OurKids enquiries notify Anita | OurYouth notify Megs | General notify Team"}
+  {key:"q",label:"Script title",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>',type:"text",ph:"e.g. What are your service times?"},
+  {key:"cat",label:"Category",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h8m-8 6h16"/></svg>',type:"text",ph:"e.g. Service Times, General Info, Pastoral / Welfare, Events & Tickets"},
+  {key:"pastoral",label:"Pastoral / Welfare",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',type:"text",ph:"Type YES or leave blank",hint:"Pastoral scripts show a red priority banner in the Command Centre"},
+  {key:"ki",label:"Key info points",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',type:"textarea",ph:"e.g. Sunday service: 9am | Cafe opens: 8am | Website: ourchurch.org.au",hint:"Each line becomes a bullet point in the Key Info panel"},
+  {key:"script",label:"Suggested script",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',type:"textarea",ph:'e.g. Thanks for calling! We meet on Sunday mornings at 9am...',hint:"Write it naturally — warm and conversational"},
+  {key:"esc",label:"Escalate to",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>',type:"text",ph:"e.g. Wendy Markham — Childrens Pastor"},
+  {key:"sms",label:"SMS template",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.13 6.13l.94-.94a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',type:"text",ph:"e.g. Hi [Name], great chatting! We meet Sundays 9am. More at ourchurch.org.au"},
+  {key:"notes",label:"Team notes",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 14-4-4 4-4"/><path d="M5 10h11a4 4 0 0 1 0 8h-1"/></svg>',type:"textarea",ph:"e.g. OurKids enquiries notify Anita | OurYouth notify Megs | General notify Team"}
 ];
 
 const SAVE_KEY='potw_concierge_form_v1';
@@ -403,7 +412,7 @@ function render(){
 
       FIELDS.forEach(f=>{
         let fieldHtml=`<div class="field">
-          <label>${f.icon}${f.label}</label>
+          <div class="field-label">${f.icon}${f.label}</div>
           ${f.type==="textarea"
             ?`<textarea rows="3" data-ent="${ent.id}" data-qi="${qi}" data-key="${f.key}" placeholder="${esc(f.ph)}" oninput="upd(this)">${esc(q[f.key]||"")}</textarea>`
             :`<input type="text" data-ent="${ent.id}" data-qi="${qi}" data-key="${f.key}" placeholder="${esc(f.ph)}" value="${esc(q[f.key]||"")}" oninput="upd(this)">`
