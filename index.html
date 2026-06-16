@@ -487,7 +487,6 @@ if(ge("qs-phone"))ge("qs-phone").value=_qsPhoneVal;
 function filterQS(brand){_qsFilter=brand;renderQS();}
 function filterDR(brand){_drFilter=brand;renderQS();}
 function saveQSFields(){if(ge("qs-name"))_qsNameVal=ge("qs-name").value;if(ge("qs-email"))_qsEmailVal=ge("qs-email").value;if(ge("qs-phone"))_qsPhoneVal=ge("qs-phone").value;}
-function saveQSFields(){if(ge("qs-name"))_qsNameVal=ge("qs-name").value;if(ge("qs-email"))_qsEmailVal=ge("qs-email").value;if(ge("qs-phone"))_qsPhoneVal=ge("qs-phone").value;}
 function renderQSPreview(){saveQSFields();renderQS();}
 function copyToClip(txt){if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(function(){toast("Message copied - paste anywhere");},function(){fallbackCopy(txt);});}else{fallbackCopy(txt);}}
 function fallbackCopy(txt){var ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand("copy");toast("Message copied - paste anywhere");}catch(e){toast("Copy failed - please select text manually","e");}document.body.removeChild(ta);}
