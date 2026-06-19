@@ -89,8 +89,8 @@ html,body{margin:0!important;padding:0!important;overflow:hidden!important;heigh
 .av-row{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;}
 .av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;}
 .proj-table{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
-.proj-thead{display:grid;grid-template-columns:2fr 1fr 100px 80px 1fr 90px 50px;padding:10px 16px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--text4);}
-.proj-row{display:grid;grid-template-columns:2fr 1fr 100px 80px 1fr 90px 50px;padding:12px 16px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;transition:background .12s;}
+.proj-thead{display:grid;grid-template-columns:2fr 1fr 100px 80px 1fr 90px 90px 50px;padding:10px 16px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--text4);}
+.proj-row{display:grid;grid-template-columns:2fr 1fr 100px 80px 1fr 90px 90px 50px;padding:12px 16px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;transition:background .12s;}
 .proj-row:last-child{border-bottom:none;}
 .proj-row:hover{background:var(--bg3);}
 .pnm{font-size:13px;font-weight:600;color:var(--text);}
@@ -841,16 +841,19 @@ function renderProjList(){
 
 function projTable(projs){
   if(!projs.length)return '<div class="empty-state"><div class="empty-icon">📂</div><div class="empty-text">No projects</div></div>';
-  var html='<div class="proj-table"><div class="proj-thead"><span>Project</span><span>Entity</span><span>Status</span><span>Priority</span><span>Lead</span><span>Progress</span><span></span></div>';
+  var html='<div class="proj-table"><div class="proj-thead"><span>Project</span><span>Entity</span><span>Status</span><span>Priority</span><span>Lead</span><span>Due Date</span><span>Progress</span><span></span></div>';
   projs.forEach(function(p){
     var e=ge(p.entity);var lm=gm(p.lead);
     var tt=p.tasks?p.tasks.length:0;var dn=p.tasks?p.tasks.filter(function(t){return t.done;}).length:0;
+    var dueColor=isOD(p)?'var(--red)':isDS(p)?'var(--orange)':'var(--text3)';
+    var dueLbl=p.due?p.due:'—';
     html+='<div class="proj-row" onclick="selectProj(\''+p.id+'\')">'+
-      '<div><div class="pnm">'+(isOD(p)?'🔴 ':isDS(p)?'🟡 ':'')+h(p.name)+'</div><div class="psub">'+dn+'/'+tt+' tasks'+(p.due?' · '+p.due:'')+'</div></div>'+
+      '<div><div class="pnm">'+(isOD(p)?'🔴 ':isDS(p)?'🟡 ':'')+h(p.name)+'</div><div class="psub">'+dn+'/'+tt+' tasks</div></div>'+
       '<div><span class="etag" style="background:'+e.color+'20;color:'+e.color+'">'+h(e.short)+'</span></div>'+
       '<div>'+spill(p.status)+'</div>'+
       '<div class="p'+p.priority+'">'+p.priority.toUpperCase()+'</div>'+
       '<div style="display:flex;align-items:center;gap:6px"><div class="av" style="background:'+lm.color+';width:22px;height:22px;font-size:8px">'+h(lm.initials)+'</div><span style="font-size:12px;color:var(--text2)">'+h(lm.name)+'</span></div>'+
+      '<div style="font-size:12px;font-weight:600;color:'+dueColor+'">'+h(dueLbl)+'</div>'+
       '<div class="pw"><div class="pb"><div class="pbf" style="width:'+projPct(p)+'%"></div></div><span class="ppc">'+projPct(p)+'%</span></div>'+
       '<div class="row-acts"><button class="delbtn" onclick="event.stopPropagation();delProj(\''+p.id+'\')" title="Delete">✕</button></div></div>';
   });
